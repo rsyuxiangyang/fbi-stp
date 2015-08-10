@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+    <head>
+        <title></title>
+    </head>
+    <body>
+    <ui:composition>
+        <h:panelGrid columns="4" cellpadding="2"
+                     columnClasses="col-label,col-input,col-label2,col-input">
+            <h:outputLabel value="任务名称:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.jobName}" size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="任务分组:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.jobGroup}" size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="时间表达式:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.cronExpression}"
+                         size="30" disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="类全路径名:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.beanClass}" size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="springId:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.springId}" size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="方法名:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.methodName}"
+                         size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="是否异步:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.isSync}" size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+            <h:outputLabel value="任务描述:"/>
+            <h:inputText value="#{scheduleJobAction.scheduleJobTemplate.description}"
+                         size="30"
+                         disabled="#{scheduleJobAction.isDisabled}"/>
+        </h:panelGrid>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

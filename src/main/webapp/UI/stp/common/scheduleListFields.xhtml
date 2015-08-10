@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+    <head>
+        <title></title>
+    </head>
+    <body>
+    <ui:composition>
+        <p:column headerText="序号" style="width:30px">
+            <h:outputText value="#{row + 1}"/>
+        </p:column>
+        <p:column headerText="任务名称" style="text-align:center">
+            <h:outputText value="#{record.jobName}"/>
+        </p:column>
+        <p:column headerText="任务分组" style="text-align:left">
+            <h:outputText value="#{record.jobGroup}"/>
+        </p:column>
+        <p:column headerText="触发器" style="text-align:center">
+            <h:outputText value="#{record.jobTrigger}"/>
+        </p:column>
+        <p:column headerText="springId" style="text-align:center">
+            <h:outputText value="#{record.jobTrigger}"/>
+        </p:column>
+        <p:column headerText="Job全路径名" style="text-align:center">
+            <h:outputText value="#{record.beanClass}"/>
+        </p:column>
+        <p:column headerText="方法名" style="text-align:center">
+            <h:outputText value="#{record.methodName}"/>
+        </p:column>
+        <p:column headerText="任务状态" style="text-align:center">
+            <h:outputText value="#{record.jobStatus}"/>
+        </p:column>
+        <p:column headerText="时间表达式" style="text-align:center">
+            <h:outputText value="#{record.cronExpression}"/>
+        </p:column>
+        <!--<p:column headerText="是否异步" style="text-align:center">
+            <h:outputText value="#{record.isSync}"/>
+        </p:column>-->
+        <p:column headerText="任务描述" style="text-align:center">
+            <h:outputText value="#{record.description}"/>
+        </p:column>
+    </ui:composition>
+    </body>
+</f:view>
+</html>

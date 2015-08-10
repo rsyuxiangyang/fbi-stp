@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+    <h:head>
+        <title>FBI Technology</title>
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <style type="text/css">
+            .ui-inputfield {
+                padding: 2px;
+            }
+            .ui-widget {
+                font-size: 12px !important;
+            }
+        </style>
+
+        <script language="javascript" src="#{request.contextPath}/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </h:head>
+    <h:body>
+        <div id="page">
+            <div id="content">
+                <div class="post">
+                <p:tabView id="tabview" dynamic="true" cache="false" style="font-weight:normal;font-style:normal">
+                    <p:tab id="tab01Id" title="任务列表">
+                        <div id="table">
+                            <h:form id="form">
+                                <p:messages id="msgs" showDetail="false"/>
+                                <p:menubar>
+                                    <p:menuitem type="push" value="添加任务"
+                                                action="#{scheduleJobAction.addRecordAction()}"
+                                                oncomplete="PF('wVDlgViewForOperate').show()"
+                                                update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                icon="ui-icon ui-icon-document"/>
+                                </p:menubar>
+                                <p:ajaxStatus style="height:18px;text-align:center">
+                                    <f:facet name="start">
+                                        <h:graphicImage value="/images/ajaxloadingbar.gif"/>
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                </p:ajaxStatus>
+                                <p:dataTable id="pdt"
+                                             dynamic="true"
+                                             value="#{scheduleJobAction.initScheduleJobList()}"
+                                             var="record"
+                                             rowKey="#{record.pkid}"
+                                             selectionMode="single"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                            {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="15"
+                                             rowIndexVar="row"
+                                             rowsPerPageTemplate="200,100,50,40,30,20,15"
+                                             emptyMessage="数据记录为空..."
+                                             scrollable="true">
+                                    <ui:include src="./common/scheduleListFields.xhtml"/>
+                                    <p:column headerText="操作" style="width:200px;text-align:center">
+                                        <p:commandLink value="修改"
+                                                       action="#{scheduleJobAction.selectRecordAction('UPD',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                        <h:outputLabel value=" "/>
+                                        <!--<p:commandLink value="删除创建"
+                                                       action="#{scheduleJobAction.selectRecordAction('DEL_CREATE',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                        <h:outputLabel value=" "/>-->
+                                        <p:commandLink value="删除"
+                                                       action="#{scheduleJobAction.selectRecordAction('DEL',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                        <h:outputLabel value=" "/>
+                                        <p:commandLink value="暂停"
+                                                       action="#{scheduleJobAction.selectRecordAction('PAUSE',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                        <h:outputLabel value=" "/>
+                                        <p:commandLink value="恢复"
+                                                       action="#{scheduleJobAction.selectRecordAction('RESUME',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                        <h:outputLabel value=" "/>
+                                        <p:commandLink value="立即运行一次"
+                                                       action="#{scheduleJobAction.selectRecordAction('RUN_ONCE',record)}"
+                                                       oncomplete="PF('wVDlgViewForOperate').show()"
+                                                       update=":tabview:form:wVDlgViewForOperateId,:tabview:form:msgs"
+                                                       style="color: blue;"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog id="wVDlgViewForOperateId" header="#{scheduleJobAction.strDialogHeader}任务" widgetVar="wVDlgViewForOperate"
+                                          resizable="false" modal="true"
+                                          showEffect="clip" hideEffect="fold">
+                                    <h:panelGrid id="scheduleViewId">
+                                        <ui:include src="./common/scheduleFields.xhtml"/>
+                                        <h:panelGrid id="pgOperBtnForAdd" columns="4">
+                                            <p:commandButton id="submitBtnForAdd"
+                                                             value="确认"
+                                                             action="#{scheduleJobAction.submitThisRecordAction()}"
+                                                             update="tabview:form:pdt,tabview:form:msgs,tabview:form:scheduleViewId">
+                                            </p:commandButton>
+                                            <p:commandButton id="resetBtnForAdd" value="重置"
+                                                             type="reset"
+                                                             rendered="#{scheduleJobAction.isResetBtnRender}"
+                                                             update="tabview:form:scheduleViewId">
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:dialog>
+                            </h:form>
+                        </div>
+                    </p:tab>
+                    <p:tab title="运行中的任务">
+                        <div id="runingtable">
+                            <h:form id="runingform">
+                                <p:dataTable id="runingpdt" style="width:100%;"
+                                             value="#{scheduleJobAction.initExecutingJobList()}"
+                                             var="record"
+                                             rowKey="#{record.pkid}"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                            {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="15"
+                                             rowIndexVar="row"
+                                             rowsPerPageTemplate="200,100,50,40,30,20,15"
+                                             emptyMessage="数据记录为空..."
+                                             scrollable="true">
+                                    <ui:include src="./common/scheduleListFields.xhtml"/>
+                                </p:dataTable>
+                            </h:form>
+                        </div>
+                    </p:tab>
+                </p:tabView>
+                </div>
+            </div>
+            <div style="clear: both;">&nbsp;</div>
+        </div>
+    </h:body>
+</f:view>
+</html>
