@@ -9,6 +9,7 @@ import java.util.Hashtable;
 /**
  * Created by XIANGYANG on 2015-8-6.
  */
+
 public enum OperateType{
     ADD("ADD", "添加"),
     UPD("UPD", "修改"),

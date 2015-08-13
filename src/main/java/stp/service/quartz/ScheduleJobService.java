@@ -1,14 +1,12 @@
 package stp.service.quartz;
 
-import stp.repository.quartz.model.not_auto.NotAutoScheduleJob;
-
+import stp.repository.quartz.model.ScheduleJob;
 import java.util.List;
 
 /**
- * 定时任务service
- *
- * Created by liyd on 12/19/14.
+ * Created by XIANGYANG on 2015-8-7.
  */
+
 public interface ScheduleJobService {
 
     /**
@@ -19,75 +17,75 @@ public interface ScheduleJobService {
     /**
      * 新增
      * 
-     * @param notAutoScheduleJob
+     * @param scheduleJobPara
      * @return
      */
-    public int insert(NotAutoScheduleJob notAutoScheduleJob);
+    public int insert(ScheduleJob scheduleJobPara);
 
     /**
      * 直接修改 只能修改运行的时间，参数、同异步等无法修改
      * 
-     * @param notAutoScheduleJob
+     * @param scheduleJobPara
      */
-    public void update(NotAutoScheduleJob notAutoScheduleJob);
+    public void update(ScheduleJob scheduleJobPara);
 
     /**
      * 删除重新创建方式
      * 
      * @param notAutoScheduleJob
      */
-    public void delUpdate(NotAutoScheduleJob notAutoScheduleJob);
+    public void delUpdate(ScheduleJob scheduleJobPara);
 
     /**
      * 删除
      * 
-     * @param scheduleJobId
+     * @param scheduleJobIdPara
      */
-    public void delete(String scheduleJobId);
+    public void delete(String scheduleJobIdPara);
 
     /**
      * 运行一次任务
      *
-     * @param scheduleJobId the schedule job id
+     * @param scheduleJobIdPara the schedule job id
      * @return
      */
-    public void runOnce(String scheduleJobId);
+    public void runOnce(String scheduleJobIdPara);
 
     /**
      * 暂停任务
      *
-     * @param scheduleJobId the schedule job id
+     * @param scheduleJobIdPara the schedule job id
      * @return
      */
-    public void pauseJob(String scheduleJobId);
+    public void pauseJob(String scheduleJobIdPara);
 
     /**
      * 恢复任务
      *
-     * @param scheduleJobId the schedule job id
+     * @param scheduleJobIdPara the schedule job id
      * @return
      */
-    public void resumeJob(String scheduleJobId);
+    public void resumeJob(String scheduleJobIdPara);
 
     /**
      * 获取任务对象
      * 
-     * @param scheduleJobId
+     * @param scheduleJobIdPara
      * @return
      */
-    public NotAutoScheduleJob get(String scheduleJobId);
+    public ScheduleJob get(String scheduleJobIdPara);
 
     /**
      * 查询任务列表
      * @return
      */
-    public List<NotAutoScheduleJob> queryList();
+    public List<ScheduleJob> queryList();
 
     /**
      * 获取运行中的任务列表
      *
      * @return
      */
-    public List<NotAutoScheduleJob> queryExecutingJobList();
+    public List<ScheduleJob> queryExecutingJobList();
 
 }

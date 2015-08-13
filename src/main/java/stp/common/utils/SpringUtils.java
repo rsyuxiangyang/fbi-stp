@@ -4,6 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+/**
+ * Created by XIANGYANG on 2015-8-10.
+ */
 
 public final class SpringUtils implements BeanFactoryPostProcessor {
 

@@ -11,6 +11,7 @@ import javax.servlet.ServletContextListener;
 /**
  * Created by XIANGYANG on 2015-8-7.
  */
+
 public class QuartzServiceLoader implements ServletContextListener {
     private SchedulerFactoryBean schedulerFactoryBean;
 

@@ -2,26 +2,20 @@ package stp.service.quartz.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import stp.repository.quartz.dao.ScheduleJobMapper;
-import stp.repository.quartz.dao.not_auto.NotAutoScheduleJobMapper;
 import stp.repository.quartz.model.ScheduleJob;
 import stp.repository.quartz.model.ScheduleJobExample;
-import stp.repository.quartz.model.not_auto.NotAutoScheduleJob;
 import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import stp.common.assistant.bean.BeanConverter;
 import stp.service.quartz.ScheduleJobService;
 import stp.common.utils.ScheduleUtils;
 
 /**
- * 定时任务
- *
- * Created by liyd on 12/19/14.
+ * Created by XIANGYANG on 2015-8-7.
  */
+
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService  {
 
@@ -29,15 +23,11 @@ public class ScheduleJobServiceImpl implements ScheduleJobService  {
     @Autowired
     private Scheduler scheduler;
 
-
     /*@Autowired
     private scheduleJobMapper   scheduleJobMapper;
     *//** 通用dao */
     @Autowired
     private ScheduleJobMapper scheduleJobMapper;
-
-    @Autowired
-    private NotAutoScheduleJobMapper notAutoScheduleJobMapper;
 
     public void initScheduleJob() {
         ScheduleJobExample example=new ScheduleJobExample();
@@ -59,75 +49,68 @@ public class ScheduleJobServiceImpl implements ScheduleJobService  {
         }
     }
 
-    public int insert(NotAutoScheduleJob notAutoScheduleJob) {
-        ScheduleJob scheduleJob = notAutoScheduleJob.getTargetObject(ScheduleJob.class);
-        ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
-        return scheduleJobMapper.insert(scheduleJob);
+    public int insert(ScheduleJob scheduleJobPara) {
+        ScheduleUtils.createScheduleJob(scheduler, scheduleJobPara);
+        return scheduleJobMapper.insert(scheduleJobPara);
     }
 
-    public void update(NotAutoScheduleJob notAutoScheduleJob) {
-        ScheduleJob scheduleJob = notAutoScheduleJob.getTargetObject(ScheduleJob.class);
-        ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
-        scheduleJobMapper.updateByPrimaryKey(scheduleJob);
+    public void update(ScheduleJob scheduleJobPara) {
+        ScheduleUtils.updateScheduleJob(scheduler, scheduleJobPara);
+        scheduleJobMapper.updateByPrimaryKey(scheduleJobPara);
     }
 
-    public void delUpdate(NotAutoScheduleJob notAutoScheduleJob) {
-        ScheduleJob scheduleJob = notAutoScheduleJob.getTargetObject(ScheduleJob.class);
+    public void delUpdate(ScheduleJob scheduleJobPara) {
         //先删除
-        ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob.getJobName(),
-            scheduleJob.getJobGroup());
+        ScheduleUtils.deleteScheduleJob(scheduler, scheduleJobPara.getJobName(),
+                scheduleJobPara.getJobGroup());
         //再创建
-        ScheduleUtils.createScheduleJob(scheduler, scheduleJob);
+        ScheduleUtils.createScheduleJob(scheduler, scheduleJobPara);
         //数据库直接更新即可
-        scheduleJobMapper.updateByPrimaryKey(scheduleJob);
+        scheduleJobMapper.updateByPrimaryKey(scheduleJobPara);
     }
 
-    public void delete(String scheduleJobId) {
-        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobId);
+    public void delete(String scheduleJobIdPara) {
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobIdPara);
         //删除运行的任务
         ScheduleUtils.deleteScheduleJob(scheduler, scheduleJob.getJobName(),
             scheduleJob.getJobGroup());
         //删除数据
-        scheduleJobMapper.deleteByPrimaryKey(scheduleJobId);
+        scheduleJobMapper.deleteByPrimaryKey(scheduleJobIdPara);
     }
 
-    public void runOnce(String scheduleJobId) {
+    public void runOnce(String scheduleJobIdPara) {
 
-        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobId);
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobIdPara);
         ScheduleUtils.runOnce(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
     }
 
-    public void pauseJob(String scheduleJobId) {
+    public void pauseJob(String scheduleJobIdPara) {
 
-        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobId);
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobIdPara);
         ScheduleUtils.pauseJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
 
         //演示数据库就不更新了
     }
 
-    public void resumeJob(String scheduleJobId) {
-        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobId);
+    public void resumeJob(String scheduleJobIdPara) {
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobIdPara);
         ScheduleUtils.resumeJob(scheduler, scheduleJob.getJobName(), scheduleJob.getJobGroup());
 
         //演示数据库就不更新了
     }
 
-    public NotAutoScheduleJob get(String scheduleJobId) {
-        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobId);
-//        return scheduleJob.getTargetObject(ScheduleJobVo.class);
-        return new NotAutoScheduleJob();
+    public ScheduleJob get(String scheduleJobIdPara) {
+        ScheduleJob scheduleJob = scheduleJobMapper.selectByPrimaryKey(scheduleJobIdPara);
+        return scheduleJob;
     }
 
 
 
-    public List<NotAutoScheduleJob> queryList() {
+    public List<ScheduleJob> queryList() {
         ScheduleJobExample example=new ScheduleJobExample();
         List<ScheduleJob> scheduleJobs = scheduleJobMapper.selectByExample(example);
-
-        List<NotAutoScheduleJob> notAutoScheduleJobList = BeanConverter.convert(NotAutoScheduleJob.class,
-            scheduleJobs);
         try {
-            for (NotAutoScheduleJob item : notAutoScheduleJobList) {
+            for (ScheduleJob item : scheduleJobs) {
 
                 JobKey jobKey = ScheduleUtils.getJobKey(item.getJobName(), item.getJobGroup());
                 List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
@@ -152,15 +135,15 @@ public class ScheduleJobServiceImpl implements ScheduleJobService  {
         } catch (SchedulerException e) {
             //演示用，就不处理了
         }
-        return notAutoScheduleJobList;
+        return scheduleJobs;
     }
 
-    public List<NotAutoScheduleJob> queryExecutingJobList() {
+    public List<ScheduleJob> queryExecutingJobList() {
         try {
             List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
-            List<NotAutoScheduleJob> jobList = new ArrayList<NotAutoScheduleJob>(executingJobs.size());
+            List<ScheduleJob> jobList = new ArrayList<ScheduleJob>(executingJobs.size());
             for (JobExecutionContext executingJob : executingJobs) {
-                NotAutoScheduleJob job = new NotAutoScheduleJob();
+                ScheduleJob job = new ScheduleJob();
                 JobDetail jobDetail = executingJob.getJobDetail();
                 JobKey jobKey = jobDetail.getKey();
                 Trigger trigger = executingJob.getTrigger();

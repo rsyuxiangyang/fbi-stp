@@ -7,6 +7,10 @@ import stp.repository.quartz.model.ScheduleJob;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * Created by XIANGYANG on 2015-8-10.
+ */
+
 public class TaskUtils {
 	public final static Logger log = Logger.getLogger(TaskUtils.class);
 

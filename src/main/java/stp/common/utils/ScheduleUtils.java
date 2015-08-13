@@ -1,20 +1,17 @@
 package stp.common.utils;
 
 import stp.repository.quartz.model.ScheduleJob;
-import stp.repository.quartz.model.not_auto.NotAutoScheduleJob;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import stp.common.exceptions.ScheduleException;
 import stp.crontask.JobFactory;
 import stp.crontask.JobSyncFactory;
 
 /**
+ * Created by XIANGYANG on 2015-8-10.
  * 定时任务辅助类
- * 
- * Created by liyd on 12/19/14.
  */
+
 public class ScheduleUtils {
 
     /** 日志对象 */
@@ -47,7 +44,7 @@ public class ScheduleUtils {
             return (CronTrigger) scheduler.getTrigger(triggerKey);
         } catch (SchedulerException e) {
             logger.error("获取定时任务CronTrigger出现异常", e);
-            throw new ScheduleException("获取定时任务CronTrigger出现异常");
+            throw new RuntimeException("获取定时任务CronTrigger出现异常");
         }
     }
 
@@ -81,7 +78,7 @@ public class ScheduleUtils {
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroup).storeDurably(true).build();
 
         //放入参数，运行时的方法可以获取
-        jobDetail.getJobDataMap().put(NotAutoScheduleJob.JOB_PARAM_KEY, param);
+        jobDetail.getJobDataMap().put(ScheduleJob.JOB_PARAM_KEY, param);
 
         //表达式调度构建器
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
@@ -94,7 +91,8 @@ public class ScheduleUtils {
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             logger.error("创建定时任务失败", e);
-            throw new ScheduleException("创建定时任务失败");
+            throw new RuntimeException("创建定时任务失败");
+            
         }
     }
 
@@ -111,7 +109,7 @@ public class ScheduleUtils {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
             logger.error("运行一次定时任务失败", e);
-            throw new ScheduleException("运行一次定时任务失败");
+            throw new RuntimeException("运行一次定时任务失败");
         }
     }
 
@@ -129,7 +127,7 @@ public class ScheduleUtils {
             scheduler.pauseJob(jobKey);
         } catch (SchedulerException e) {
             logger.error("暂停定时任务失败", e);
-            throw new ScheduleException("暂停定时任务失败");
+            throw new RuntimeException("暂停定时任务失败");
         }
     }
 
@@ -147,7 +145,7 @@ public class ScheduleUtils {
             scheduler.resumeJob(jobKey);
         } catch (SchedulerException e) {
             logger.error("恢复定时任务失败", e);
-            throw new ScheduleException("恢复定时任务失败");
+            throw new RuntimeException("恢复定时任务失败");
         }
     }
 
@@ -203,7 +201,7 @@ public class ScheduleUtils {
             }
         } catch (SchedulerException e) {
             logger.error("更新定时任务失败", e);
-            throw new ScheduleException("更新定时任务失败");
+            throw new RuntimeException("更新定时任务失败");
         }
     }
 
@@ -219,7 +217,7 @@ public class ScheduleUtils {
             scheduler.deleteJob(getJobKey(jobName, jobGroup));
         } catch (SchedulerException e) {
             logger.error("删除定时任务失败", e);
-            throw new ScheduleException("删除定时任务失败");
+            throw new RuntimeException("删除定时任务失败");
         }
     }
 }

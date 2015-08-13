@@ -9,8 +9,10 @@ import org.springframework.stereotype.Component;
 import stp.service.quartz.ScheduleJobService;
 
 /**
+ * Created by XIANGYANG on 2015-8-7.
  * 定时任务初始化
- * */
+ */
+
 @Component
 public class ScheduleJobInit {
     private static final Logger logger = LoggerFactory.getLogger(ScheduleJobInit.class);

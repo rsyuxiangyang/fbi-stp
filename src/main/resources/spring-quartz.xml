@@ -14,5 +14,4 @@
         <!--<property name="triggerListeners" ref="myTriggerListener"/>
         <property name="jobListeners" ref="myJobDetailListener"/>-->
     </bean>
-    <!--<bean id="schedulerFactoryBean" class="org.springframework.scheduling.crontask.SchedulerFactoryBean"/>-->
 </beans>
